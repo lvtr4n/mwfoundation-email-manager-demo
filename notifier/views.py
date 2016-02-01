@@ -46,23 +46,7 @@ class Utility():
 
 util = Utility()
 
-class LoginView(View):
-    def get(self, request):
-        return render(request, "login.html")
-
-    def post(self, request):
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        user = authenticate(username=username, password=password)
-        if user:
-            login(request, user)
-            return redirect("/email")
-        else:
-            return render(request, "login.html", {"error":True})
-
-class IndexView(LoginRequiredMixin, View):
-    login_url = '/'
-
+class IndexView(View):
     def get(self, request):
         context = {
             "streets": ["All streets"] + Utility().get_streets()
@@ -98,9 +82,7 @@ class IndexView(LoginRequiredMixin, View):
             return HttpResponse('true')
         return HttpResponse('false')
 
-class ListView(LoginRequiredMixin, View):
-    login_url = '/'
-
+class ListView(View):
     def get_context(self):
         streets = util.get_streets()
         emails = [util.get_residents_emails(street) for street in streets]

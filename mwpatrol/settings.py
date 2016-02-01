@@ -78,10 +78,10 @@ WSGI_APPLICATION = 'mwpatrol.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', 
-        'NAME': 'd7r7svfnikc2ke',                     
-        'USER': 'lbcdjlziexndae',
-        'PASSWORD': 'Fu2GdhE1nsyoFrpvJIdtg1rro4',
-        'HOST': 'ec2-54-163-228-109.compute-1.amazonaws.com',
+        'NAME': 'dc9l9kc8n6p4h9',                     
+        'USER': 'ieguyfngcllier',
+        'PASSWORD': 'lGkiz92pyGDDLvZ54lUQI13pXR',
+        'HOST': 'ec2-54-225-195-249.compute-1.amazonaws.com',
         'PORT': '5432',                     
     }
 }
@@ -152,7 +152,7 @@ LOGGING = {
 }
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'mandellwinlow@gmail.com'
+EMAIL_HOST_USER = 'mandellwinlowdemo@gmail.com'
 EMAIL_HOST_PASSWORD = 'Sunnysideup'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

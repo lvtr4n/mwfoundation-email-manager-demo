@@ -6,8 +6,7 @@ from notifier import views as notifier_views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', notifier_views.LoginView.as_view()),
-    url(r'^email/', notifier_views.IndexView.as_view()),
+    url(r'^$', notifier_views.IndexView.as_view()),
     url(r'^send/', notifier_views.IndexView.as_view()),
     url(r'^lists/', notifier_views.ListView.as_view()),
     url(r'^save-list/', notifier_views.ListView.as_view()),
