@@ -24,7 +24,9 @@ select {
 #export-list {
     display: inline-block;
 }
-
+#chooser {
+    visibility: hidden;
+}
 .chip {
     display: inline-block;
     height: 32px;

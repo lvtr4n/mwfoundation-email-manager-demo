@@ -10,12 +10,20 @@ $.ajaxSetup({
     }
 });
 
+$("#chooser-button").click(function(){
+    $("#chooser").click();
+});
+$("#chooser").change(function(){
+    $("#chooser-result").html("✓ File(s) selected");
+});
+
 $("#sendButton").click(function() {
     $("#sendButton").html("Sending ...");
     var data = new FormData();
     data.append("subject", $("#emailSubject").val());
     data.append("body", tinyMCE.activeEditor.getContent());
     data.append("list", $("#selectList").val());
+    data.append("demo-email", $("#demo-email").val());
 
     var files = $("#chooser")[0].files;
     for(var i = 0; i < files.length; i++) {

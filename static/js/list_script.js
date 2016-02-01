@@ -43,6 +43,8 @@ $.ajaxSetup({
 });
 
 $(".save-list").click(function() {
+    var thisButton = $(this);
+    thisButton.html("Saving ...");
     var chips = $(this).closest(".row").parent().find(".editable .chip");
     var emails = [];
     for(var i = 0; i < chips.length; i++) {
@@ -60,6 +62,7 @@ $(".save-list").click(function() {
             if(data != "200") {
                 alert("Something went wrong.");
             }
+            thisButton.html("Save");
         }
     });
 });
