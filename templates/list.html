@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="list_manager">
+    <div class="row">
+        <h3>New List</h3>
+        <div class="form-group">
+            <form method="POST" class="input-group">
+                {% csrf_token %}
+                <input class="form-control" type="text" placeholder="New list name" name="list_name"/>
+                <span class="input-group-btn">
+                    <button name="create_list" class="btn btn-primary center-block">Create</button>
+                </span>
+            </form>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <h3>Export List</h3>
+        <span>Save the current database of emails into a text file.</span>
+        <button id="export-list" class="btn btn-primary">Export</button>
+    </div>
+    <hr>
+
+    {% for street, emails in data %}
+        <div class="row">
+            <div class="row">
+                <div class="col-xs-2">
+                    <h3>{{street|title}}</h3>
+                </div>
+                <div class="col-xs-10">
+                    <input class="newEmailInput form-control" placeholder="Type new email and hit enter to add"/>
+                    <button class="addEmail btn btn-default left-block">Add</button>
+                    <button class="save-list btn btn-primary left-block">Save list</button>
+                    <form method="POST" class="float-form">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{street}}" name="list_name"/>            
+                        <button name="delete_list" class="btn btn-danger left-block">Delete list</button>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="editable form-control">
+                        {% for email in emails %}
+                            <div class="chip">{{ email }}
+                                <i class="fa fa-times"></i>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+    {% endfor %}
+</div>
+
+{% load staticfiles %}
+<script type="text/javascript" src="{% static 'js/list_script.js' %}"></script>
+
+{% endblock %}

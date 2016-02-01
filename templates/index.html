@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="email_manager">
+    <h4>Email Manager</h4>
+    <div class="form-group">
+        {% csrf_token %}
+        <input id="emailSubject" class="form-control" type="text" placeholder="Subject" name="subject"/>
+        <textarea id="email_editor" placeholder="Body" rows="15" name="body"></textarea>
+        <select id="selectList" name="street" class="form-control">
+            {% for street in streets %}
+                <option>{{ street.title | title }}</option>
+            {% endfor %}
+        </select>
+        
+        <input type="file" id="chooser" multiple/>
+        <button id="sendButton" class="btn btn-primary center-block">Send</button>
+    </div>
+
+    <div id="status"></div>
+</div>
+
+{% load staticfiles %}
+<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+<div class="form-group login-panel">
+    <form method="POST">
+        {% csrf_token %}
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>Invalid credentials
+            </div>
+        {% endif %}
+        <input class="form-control" type="text" placeholder="Username" name="username"/>
+        <input class="form-control" type="password" placeholder="Password" name="password"/>
+        <button class="btn btn-primary center-block">Sign In</button>
+    </form>
+
+    
+</div>
+
+{% endblock %}
