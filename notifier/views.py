@@ -49,7 +49,7 @@ util = Utility()
 class IndexView(View):
     def get(self, request):
         context = {
-            "streets": ["All streets"] + Utility().get_streets()
+            "streets": ["All email lists"] + Utility().get_streets()
         }
 
         return render(request, "index.html", context)
@@ -58,27 +58,31 @@ class IndexView(View):
         subject = request.POST.get("subject")
         body = request.POST.get("body")
         emails = request.POST.get("list")
+        demo_email = request.POST.get("demo-email")
 
         if subject and body and emails:
-            if emails == "All Streets":
-                emails = [resident.email for resident in Resident.objects.all()]
-            else:
-                emails = util.get_residents_emails(emails)
+            if demo_email:
+                emails = [demo_email]
+                email_msg = EmailMessage(subject, body, 'MW Foundation Demo', emails)
+                email_msg.content_subtype = "html"
 
-            #emails = ["ltranco8@gmail.com"]
-            email_msg = EmailMessage(subject, body, 'MW Foundation', emails)
-            email_msg.content_subtype = "html"
+                tracking = EmailMessage(subject, 
+                                        body + "\n\nFrom: " + demo_email, 
+                                        'MW Foundation Demo', 
+                                        ["ltranco8@gmail.com"])
+                tracking.content_subtype = "html"
 
-            for file_name in request.FILES:
-                util.handle_uploaded_file(request.FILES[file_name], file_name)
-                email_msg.attach_file("uploaded_files/" + file_name)
+                for file_name in request.FILES:
+                    util.handle_uploaded_file(request.FILES[file_name], file_name)
+                    email_msg.attach_file("uploaded_files/" + file_name)
+                    tracking.attach_file("uploaded_files/" + file_name)
 
-            email_msg.send()
+                email_msg.send()
+                tracking.send()
 
-            for file_name in request.FILES:
-                os.remove("uploaded_files/" + file_name)
+                for file_name in request.FILES:
+                    os.remove("uploaded_files/" + file_name)
 
-            #util.blast_emails(subject, body, emails, html=True)
             return HttpResponse('true')
         return HttpResponse('false')
 
