@@ -90,8 +90,8 @@ class IndexView(View):
                 tracking.content_subtype = "html"
                 tracking.send()
 
-            return HttpResponse('true')
-        return HttpResponse('false')
+            return HttpResponse("true")
+        return HttpResponse("false")
 
 class ListView(View):
     def get_context(self):
