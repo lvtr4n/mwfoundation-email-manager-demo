@@ -24,7 +24,7 @@ class Utility():
         try:
             email_msg.send()
 
-            del_from = "tmp"
+            del_from = "/tmp"
             for the_file in os.listdir(del_from):
                 file_path = os.path.join(del_from, the_file)
                 try:
@@ -81,7 +81,7 @@ class IndexView(View):
 
             for file_name in request.FILES:
                 util.handle_uploaded_file(request.FILES[file_name], file_name)
-                email_msg.attach_file("tmp/" + file_name)
+                email_msg.attach_file("/tmp/" + file_name)
                 
             util.blast_emails(email_msg)
 
