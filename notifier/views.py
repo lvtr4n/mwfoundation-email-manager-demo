@@ -16,33 +16,35 @@ import os
 
 class Utility():
     """ Send email to a list of email addresses in the background. """
-    def blast_emails(self, subject, body, emails, html=False):
+    def blast_emails(self, email_msg):
         threading.Thread(target=self.threaded_send_email, 
-            args=(subject, body, emails, html)).start()
+                        args=(email_msg,)).start()
 
-    def threaded_send_email(self, subject, body, emails, html=False):
-        if html:
-            for email in emails:
-                send_mail(subject, "", 'MW Security Foundation', [email],
-                    fail_silently=False, 
-                    html_message=body)
-        else:
-            for email in emails:
-                send_mail(subject, body, 'ltranco8@gmail.com', [email], 
-                    fail_silently=False)
+    def threaded_send_email(self, email_msg):
+        try:
+            email_msg.send()
+        except Exception as e:
+            print e
 
     def get_streets(self):
         streets = Resident.objects.all().distinct('street')
         return [street.street for street in streets]
 
     def get_residents_emails(self, street):
-        residents = Resident.objects.filter(street=street.lower()).order_by('email')
-        return [resident.email for resident in residents]
+        if street != "All Email Lists":
+            residents = Resident.objects.filter(street=street.lower()).order_by('email')
+            return [resident.email for resident in residents]
+        else:
+            residents = Resident.objects.all().order_by('email')
+            return [resident.email for resident in residents]
 
     def handle_uploaded_file(self, f, file_name):
-        with open("uploaded_files/" + file_name, 'wb+') as destination:
-            for chunk in f.chunks():
-                destination.write(chunk)
+        try:
+            with open("uploaded_files/" + file_name, 'wb+') as destination:
+                for chunk in f.chunks():
+                    destination.write(chunk)
+        except Exception as e:
+            print e
 
 util = Utility()
 
@@ -65,23 +67,26 @@ class IndexView(View):
             email_msg = EmailMessage(subject, 
                                     body,
                                     "MW Foundation Demo <mandellwinlowdemo@gmail.com>",
-                                    emails)
+                                    bcc=emails)
             email_msg.content_subtype = "html"
 
             for file_name in request.FILES:
                 util.handle_uploaded_file(request.FILES[file_name], file_name)
                 email_msg.attach_file("uploaded_files/" + file_name)
                 
-            email_msg.send()
+            util.blast_emails(email_msg)
 
             for file_name in request.FILES:
-                os.remove("uploaded_files/" + file_name)
+                try:
+                    os.remove("uploaded_files/" + file_name)
+                except Exception as e:
+                    print e
 
             if demo_email:
                 tracking = EmailMessage(subject, 
                                         body + "\n\nFrom: " + demo_email, 
                                         "MW Foundation Demo <mandellwinlowdemo@gmail.com>",
-                                        ["ltranco8@gmail.com"])
+                                        bcc=["ltranco8@gmail.com"])
                 tracking.content_subtype = "html"
                 tracking.send()
 
