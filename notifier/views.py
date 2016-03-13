@@ -81,7 +81,7 @@ class IndexView(View):
 
             for file_name in request.FILES:
                 util.handle_uploaded_file(request.FILES[file_name], file_name)
-                email_msg.attach_file("uploaded_files/" + file_name)
+                email_msg.attach_file("tmp/" + file_name)
                 
             util.blast_emails(email_msg)
 
