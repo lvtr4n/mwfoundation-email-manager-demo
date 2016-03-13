@@ -24,7 +24,7 @@ class Utility():
         try:
             email_msg.send()
 
-            del_from = "uploaded_files"
+            del_from = "tmp"
             for the_file in os.listdir(del_from):
                 file_path = os.path.join(del_from, the_file)
                 try:
@@ -49,7 +49,7 @@ class Utility():
 
     def handle_uploaded_file(self, f, file_name):
         try:
-            with open("uploaded_files/" + file_name, 'wb+') as destination:
+            with open("/tmp/" + file_name, 'wb+') as destination:
                 for chunk in f.chunks():
                     destination.write(chunk)
         except Exception as e:
