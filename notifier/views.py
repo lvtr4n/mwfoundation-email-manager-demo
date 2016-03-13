@@ -61,27 +61,29 @@ class IndexView(View):
         demo_email = request.POST.get("demo-email")
 
         if subject and body and emails:
-            if demo_email:
-                emails = [demo_email]
-                email_msg = EmailMessage(subject, body, 'MW Foundation Demo', emails)
-                email_msg.content_subtype = "html"
+            emails = util.get_residents_emails(emails)
+            email_msg = EmailMessage(subject, 
+                                    body,
+                                    "MW Foundation Demo <mandellwinlowdemo@gmail.com>",
+                                    emails)
+            email_msg.content_subtype = "html"
 
+            for file_name in request.FILES:
+                util.handle_uploaded_file(request.FILES[file_name], file_name)
+                email_msg.attach_file("uploaded_files/" + file_name)
+                
+            email_msg.send()
+
+            for file_name in request.FILES:
+                os.remove("uploaded_files/" + file_name)
+
+            if demo_email:
                 tracking = EmailMessage(subject, 
                                         body + "\n\nFrom: " + demo_email, 
-                                        'MW Foundation Demo', 
+                                        "MW Foundation Demo <mandellwinlowdemo@gmail.com>",
                                         ["ltranco8@gmail.com"])
                 tracking.content_subtype = "html"
-
-                for file_name in request.FILES:
-                    util.handle_uploaded_file(request.FILES[file_name], file_name)
-                    email_msg.attach_file("uploaded_files/" + file_name)
-                    tracking.attach_file("uploaded_files/" + file_name)
-
-                email_msg.send()
                 tracking.send()
-
-                for file_name in request.FILES:
-                    os.remove("uploaded_files/" + file_name)
 
             return HttpResponse('true')
         return HttpResponse('false')
