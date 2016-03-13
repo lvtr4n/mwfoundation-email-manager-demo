@@ -23,6 +23,15 @@ class Utility():
     def threaded_send_email(self, email_msg):
         try:
             email_msg.send()
+
+            del_from = "uploaded_files"
+            for the_file in os.listdir(del_from):
+                file_path = os.path.join(del_from, the_file)
+                try:
+                    if os.path.isfile(file_path):
+                        os.unlink(file_path)
+                except Exception as e:
+                    print e
         except Exception as e:
             print e
 
@@ -75,12 +84,6 @@ class IndexView(View):
                 email_msg.attach_file("uploaded_files/" + file_name)
                 
             util.blast_emails(email_msg)
-
-            for file_name in request.FILES:
-                try:
-                    os.remove("uploaded_files/" + file_name)
-                except Exception as e:
-                    print e
 
             if demo_email:
                 tracking = EmailMessage(subject, 
